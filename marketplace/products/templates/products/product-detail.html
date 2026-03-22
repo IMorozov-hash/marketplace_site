@@ -1,0 +1,19 @@
+{% extends 'main/layout.html'%}
+
+
+{%block title%}
+    {{product.name}}
+{%endblock%}
+
+{% block content%}
+<div class = "features">
+    <h1>
+        {{product.name}}
+    </h1>
+    <p>{{product.content}}</p>
+    <p>{{product.price}}</p>
+    <a href="{% url 'product-delete' product.id %}" class = "btn btn-danger">Удалить товар</a>
+        <a href="{% url 'product-update' product.id %}" class = "btn btn-danger"> Редактировать информацию о товаре </a>
+</div>
+
+{%endblock%}
