@@ -1,30 +1,474 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title%} {% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel = "stylesheet" href = "{% static 'main/css/main.css'%}">
-<link rel="stylesheet" href="https://use.fontawesome.com/release/v5/8/2/css/all/css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Каталог товаров{% endblock %}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── CSS Variables ─────────────────────────────────────── */
+    :root {
+      --ink:          #1a1a1a;
+      --paper:        #f5f0e8;
+      --card-bg:      #fdfaf5;
+      --accent:       #c8a96e;
+      --accent-dark:  #a6854a;
+      --muted:        #9a8f7e;
+      --border:       #d8d0c0;
+      --danger:       #b83232;
+      --danger-light: rgba(184, 50, 50, 0.07);
+      --success:      #2d7a4f;
+    }
+
+    /* ─── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ─── Base ──────────────────────────────────────────────── */
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      color: var(--ink);
+      background-color: var(--paper);
+      background-image:
+        radial-gradient(ellipse at 20% 80%, rgba(200, 169, 110, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 10%, rgba(200, 169, 110, 0.06) 0%, transparent 50%);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ─── Typography ────────────────────────────────────────── */
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    h1 { font-size: clamp(34px, 5vw, 52px); }
+    h2 { font-size: clamp(26px, 4vw, 38px); }
+    h3 { font-size: clamp(20px, 3vw, 28px); }
+
+    h1 em, h2 em, h3 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── Layout wrapper ────────────────────────────────────── */
+    .features {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .page-wrapper {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* ─── Card ──────────────────────────────────────────────── */
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 48px 52px;
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.04),
+        0 8px 32px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(200, 169, 110, 0.04);
+      position: relative;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 52px; right: 52px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+    }
+
+    .form-card.danger::before {
+      background: linear-gradient(to right, transparent, var(--danger), transparent);
+    }
+
+    /* ─── Page header ───────────────────────────────────────── */
+    .form-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .form-eyebrow {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .form-eyebrow.danger { color: var(--danger); }
+
+    .header-rule {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .header-rule::before,
+    .header-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+    }
+
+    .header-rule::before { background: linear-gradient(to right, transparent, var(--border)); }
+    .header-rule::after  { background: linear-gradient(to left,  transparent, var(--border)); }
+
+    .header-rule-icon {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .header-rule-icon.danger { background: var(--danger); }
+
+    /* ─── Form fields ───────────────────────────────────────── */
+    .field-group { margin-bottom: 28px; }
+
+    .field-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .form-card input[type="text"],
+    .form-card input[type="number"],
+    .form-card input[type="email"],
+    .form-card input[type="url"],
+    .form-card input[type="password"],
+    .form-card textarea,
+    .form-card select {
+      width: 100%;
+      padding: 14px 18px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      appearance: none;
+    }
+
+    .form-card input:focus,
+    .form-card textarea:focus,
+    .form-card select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.12);
+    }
+
+    .form-card textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+
+    /* Django default wraps fields in <p> */
+    .form-card p { margin-bottom: 28px; }
+    .form-card p:last-of-type { margin-bottom: 0; }
+
+    /* ─── Buttons ───────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 32px;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.15s;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn span { position: relative; z-index: 1; }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 0;
+    }
+
+    .btn:hover::after  { transform: translateX(0); }
+    .btn:active        { transform: scale(0.99); }
+
+    /* Primary (dark → accent) */
+    .btn-primary {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+    .btn-primary::after   { background: var(--accent); }
+    .btn-primary:hover    { border-color: var(--accent); }
+
+    /* Danger (dark → red) */
+    .btn-danger {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+    .btn-danger::after  { background: var(--danger); }
+    .btn-danger:hover   { border-color: var(--danger); }
+
+    /* Outline / ghost */
+    .btn-outline {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--border);
+    }
+    .btn-outline::after  { background: var(--paper); }
+    .btn-outline:hover   { border-color: var(--ink); }
+
+    /* btn-success alias → same as btn-primary (backward compat) */
+    .btn-success {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+    .btn-success::after  { background: var(--accent); }
+    .btn-success:hover   { border-color: var(--accent); }
+
+    /* btn-info alias */
+    .btn-info {
+      background: transparent;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-info::after  { background: var(--accent); }
+    .btn-info:hover   { color: white; }
+
+    /* btn-warning alias */
+    .btn-warning {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--border);
+    }
+    .btn-warning::after  { background: var(--accent); }
+    .btn-warning:hover   { color: white; border-color: var(--accent); }
+
+    .btn-block { display: flex; width: 100%; }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-row .btn:first-child { flex: 1; }
+    .btn-row .btn:last-child  { flex: 2; }
+
+    /* ─── Alert / notification blocks ──────────────────────── */
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border-radius: 2px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .alert svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    .alert-warning {
+      background: rgba(200, 169, 110, 0.1);
+      border: 1px solid rgba(200, 169, 110, 0.3);
+      border-left: 3px solid var(--accent);
+      color: var(--ink);
+    }
+
+    .alert-danger {
+      background: var(--danger-light);
+      border: 1px solid rgba(184, 50, 50, 0.18);
+      border-left: 3px solid var(--danger);
+      color: var(--ink);
+    }
+
+    .alert-danger strong { font-weight: 500; color: var(--danger); }
+
+    .alert-error {
+      background: rgba(184, 50, 50, 0.05);
+      border: 1px solid rgba(184, 50, 50, 0.2);
+      border-left: 3px solid var(--danger);
+      color: var(--danger);
+      font-size: 13px;
+    }
+
+    /* ─── Product card (list page) ──────────────────────────── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 32px 28px;
+      position: relative;
+      transition: box-shadow 0.25s ease, transform 0.2s ease;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 28px; right: 28px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .product-card:hover::before { opacity: 1; }
+
+    .product-card h3 {
+      font-size: 22px;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+
+    .product-card .price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .product-card .card-actions { margin-top: 20px; }
+
+    /* ─── Product detail ────────────────────────────────────── */
+    .product-detail-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 60px);
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .product-detail-name em { font-style: italic; color: var(--accent); }
+
+    .product-detail-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .product-detail-content {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
+
+    .detail-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ─── Empty state ───────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state p {
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* ─── Footer note ───────────────────────────────────────── */
+    .form-footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── Animations ────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .anim-1 { animation: fadeUp 0.5s 0.00s ease both; }
+    .anim-2 { animation: fadeUp 0.5s 0.10s ease both; }
+    .anim-3 { animation: fadeUp 0.5s 0.20s ease both; }
+    .anim-4 { animation: fadeUp 0.5s 0.30s ease both; }
+
+    /* ─── Responsive ────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .form-card { padding: 36px 28px; }
+      .form-card::before { left: 28px; right: 28px; }
+      .btn-row { flex-direction: column; }
+      .btn-row .btn { flex: unset; width: 100%; }
+    }
+  </style>
 </head>
 <body>
 
-    <aside>
-        <h3> Навигация</h3>
-        <ul>
-        <a href = "{% url 'home-page' %}"><li><i class="fa-solid fa-house"></i> Главная</li> </a>
-        <a href = "{% url 'about-page' %}"><li><i class="fa-solid fa-face-smile"></i> Про нас</li> </a>
-        <a href = "{% url 'contact-page'%}"><li><i class="fa-solid fa-phone"></i> Контакты</li> </a>
-            <a href = "{% url 'product-home'%}"><li></i> Товары </li> </a>
-            <a href = "{% url 'product-create'%}"><li><button class = "btn btn-info"><i class = "fas fa-plus-circle"></i> Добавить товар </button> </li> </a>
-
-        </ul>
-    </aside>
-    <main>
-        {% block content%}
-        {% endblock %}
-    </main>
+  {% block content %}{% endblock %}
 
 </body>
 </html>

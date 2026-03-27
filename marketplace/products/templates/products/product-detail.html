@@ -1,19 +1,30 @@
-{% extends 'main/layout.html'%}
+{% extends 'main/layout.html' %}
 
+{% block title %}{{ product.name }}{% endblock %}
 
-{%block title%}
-    {{product.name}}
-{%endblock%}
+{% block content %}
+<div class="page-wrapper">
 
-{% block content%}
-<div class = "features">
-    <h1>
-        {{product.name}}
-    </h1>
-    <p>{{product.content}}</p>
-    <p>{{product.price}}</p>
-    <a href="{% url 'product-delete' product.id %}" class = "btn btn-danger">Удалить товар</a>
-        <a href="{% url 'product-update' product.id %}" class = "btn btn-danger"> Редактировать информацию о товаре </a>
+  <div class="anim-1">
+    <span class="form-eyebrow">Детальная страница</span>
+    <div class="product-detail-name">{{ product.name }}</div>
+    <div class="header-rule" style="max-width:400px; margin-bottom:28px;">
+      <div class="header-rule-icon"></div>
+    </div>
+  </div>
+
+  <div class="product-detail-price anim-2">{{ product.price }} BYN</div>
+
+  <p class="product-detail-content anim-2">{{ product.content }}</p>
+
+  <div class="detail-actions anim-3">
+    <a href="{% url 'product-delete' product.id %}" class="btn btn-danger">
+      <span>Удалить товар</span>
+    </a>
+    <a href="{% url 'product-update' product.id %}" class="btn btn-outline">
+      <span>Редактировать информацию о товаре</span>
+    </a>
+  </div>
+
 </div>
-
-{%endblock%}
+{% endblock %}

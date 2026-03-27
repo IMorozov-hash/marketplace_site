@@ -15,7 +15,9 @@ class ProductDetailView(DetailView):
 
 class ProductUpdateView(UpdateView):
     model = Product
+    fields = '__all__'
     template_name = 'products/create.html'
+    success_url = reverse_lazy('product-home')
 
 
 class ProductDeleteView(DeleteView):

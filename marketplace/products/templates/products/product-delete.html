@@ -1,21 +1,44 @@
 {% extends 'main/layout.html'%}
 
+{% block title %}Удаление записи{% endblock %}
 
-{%block title%}
-    Удаление записи
-{%endblock%}
+{% block content %}
+<div class="features">
+  <div class="form-wrapper">
 
-{% block content%}
-<div class = "features">
-    <h1>
-       Удаление товара
-    </h1>
-    <form method="post">
-        {% csrf_token %}<br>
+    <div class="form-header anim-1">
+      <span class="form-eyebrow danger">Необратимое действие</span>
+      <h1>Удаление <em style="color:var(--danger)">товара</em></h1>
+      <div class="header-rule"><div class="header-rule-icon danger"></div></div>
+    </div>
 
-        <span>{{ error }}</span>
-        <button class = "btn btn-success" type = "submit">Удалить статью</button>
-    </form>
+    <div class="form-card danger anim-2">
+
+      <div class="alert alert-danger">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495z"/>
+          <line x1="10" y1="8" x2="10" y2="11"/>
+          <circle cx="10" cy="14" r="0.75" fill="currentColor" stroke="none"/>
+        </svg>
+        <span>Вы собираетесь <strong>безвозвратно удалить</strong> этот товар. Это действие нельзя отменить.</span>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+
+        {% if error %}
+        <div class="alert alert-error">
+          <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <div class="btn-row">
+          <a href="javascript:history.back()" class="btn btn-outline">Отмена</a>
+          <button class="btn btn-danger" type="submit"><span>Удалить статью</span></button>
+        </div>
+      </form>
+    </div>
+
+  </div>
 </div>
-
-{%endblock%}
+{% endblock %}

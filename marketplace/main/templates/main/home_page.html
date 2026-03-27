@@ -1,13 +1,149 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Главная страница</title>
-</head>
-    <h>Главная страница</h>
-<br>
-<body>
-    <a href="{% url 'contact-page' %}">Контакты</a><br>
-    <a href="{% url 'about-page' %}">Про нас</a><br>
-</body>
-</html>
+{% extends 'main/layout.html' %}
+ 
+{% block title %}Главная страница{% endblock %}
+ 
+{% block content %}
+<div class="page-wrapper">
+ 
+  <div class="anim-1">
+    <span class="form-eyebrow">Добро пожаловать</span>
+    <h1>Главная <em>страница</em></h1>
+    <div class="header-rule" style="max-width:400px; margin-bottom:40px;">
+      <div class="header-rule-icon"></div>
+    </div>
+  </div>
+ 
+  <nav class="home-nav anim-2">
+    <a href="{% url 'contact-page' %}" class="home-nav-item">
+      <div class="home-nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <div class="home-nav-text">
+        <span class="home-nav-label">Контакты</span>
+        <span class="home-nav-sub">Свяжитесь с нами</span>
+      </div>
+      <div class="home-nav-arrow">→</div>
+    </a>
+ 
+    <a href="{% url 'about-page' %}" class="home-nav-item">
+      <div class="home-nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </div>
+      <div class="home-nav-text">
+        <span class="home-nav-label">Про нас</span>
+        <span class="home-nav-sub">Наша история и миссия</span>
+      </div>
+      <div class="home-nav-arrow">→</div>
+    </a>
+ 
+    <a href="{% url 'product-home' %}" class="home-nav-item">
+      <div class="home-nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </div>
+      <div class="home-nav-text">
+        <span class="home-nav-label">Товары</span>
+        <span class="home-nav-sub">Весь каталог продукции</span>
+      </div>
+      <div class="home-nav-arrow">→</div>
+    </a>
+  </nav>
+ 
+</div>
+ 
+<style>
+  .home-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 560px;
+  }
+ 
+  .home-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 24px 28px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: box-shadow 0.25s, transform 0.2s, border-color 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+ 
+  .home-nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.25s ease;
+  }
+ 
+  .home-nav-item:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    transform: translateX(4px);
+    border-color: rgba(200,169,110,0.4);
+  }
+ 
+  .home-nav-item:hover::before { transform: scaleY(1); }
+ 
+  .home-nav-icon {
+    width: 44px; height: 44px;
+    background: rgba(200,169,110,0.1);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--accent);
+    transition: background 0.25s;
+  }
+ 
+  .home-nav-icon svg { width: 20px; height: 20px; }
+ 
+  .home-nav-item:hover .home-nav-icon { background: rgba(200,169,110,0.18); }
+ 
+  .home-nav-text {
+    flex: 1;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+ 
+  .home-nav-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+  }
+ 
+  .home-nav-sub {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+ 
+  .home-nav-arrow {
+    font-size: 18px;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.25s, transform 0.25s;
+  }
+ 
+  .home-nav-item:hover .home-nav-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+{% endblock %}

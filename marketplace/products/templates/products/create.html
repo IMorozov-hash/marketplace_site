@@ -1,25 +1,55 @@
 {% extends 'main/layout.html'%}
 
+{% block title %}Добавление нового товара{% endblock %}
 
-{%block title%}
-Добавление нового товара
-{%endblock%}
+{% block content %}
+<div class="features">
+  <div class="form-wrapper">
 
-{% block content%}
-<div class = "features">
-    <h1>
-       Форма по добавлению товара
-    </h1>
-    <form method="post">
-        {% csrf_token %}<br>
-        {{ form.name }}<br>
-        {{ form.content }}<br>
-        {{ form.price }}<br>
+    <div class="form-header anim-1">
+      <span class="form-eyebrow">Управление каталогом</span>
+      <h1>Форма по добавлению/редактированию <em>товара</em></h1>
+      <div class="header-rule"><div class="header-rule-icon"></div></div>
+    </div>
+
+    <div class="form-card anim-2">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="field-group">
+          <label class="field-label">Название</label>
+          {{ form.name }}
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Описание</label>
+          {{ form.content }}
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Цена</label>
+          {{ form.price }}
+        </div>
+
         {% if error %}
-            <span>{{ error }}</span>
+        <div class="alert alert-error">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="10" cy="10" r="8.5"/>
+            <line x1="10" y1="6" x2="10" y2="10.5"/>
+            <circle cx="10" cy="13.5" r="0.75" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>{{ error }}</span>
+        </div>
         {% endif %}
-        <button class = "btn btn-success" type = "submit">Добавить товар</button>
-    </form>
-</div>
 
-{%endblock%}
+        <button class="btn btn-success btn-block" type="submit" style="margin-top:36px;">
+          <span>Добавить товар</span>
+        </button>
+      </form>
+    </div>
+
+    <p class="form-footer anim-3">Все поля обязательны для заполнения</p>
+
+  </div>
+</div>
+{% endblock %}

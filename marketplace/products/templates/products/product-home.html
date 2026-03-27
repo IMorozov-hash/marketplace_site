@@ -1,26 +1,51 @@
 {% extends 'main/layout.html'%}
 
 
-{%block title%}
-Главная
-{%endblock%}
 
-{% block content%}
-<div class = "features">
-    <h1>
-        Товары
-    </h1>
-    {% if products %}
-        {% for el in products %}
-            <div class = "alert alert-warning">
-                <h3>{{ el.name }}</h3>
-                <a href="{% url 'product-detail' el.id %}" class = 'btn btn-warning'> читать детальнее</a>
+{% block title %}Товары{% endblock %}
 
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>Нет записей</p>
-    {% endif %}
+{% block content %}
+<div class="page-wrapper">
+
+  <div class="anim-1" style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:8px;">
+    <div>
+      <span class="form-eyebrow">Каталог</span>
+      <h1>Все <em>товары</em></h1>
+    </div>
+    <a href="{% url 'product-create' %}" class="btn btn-info anim-1">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; position:relative; z-index:1;">
+        <line x1="10" y1="4" x2="10" y2="16"/>
+        <line x1="4" y1="10" x2="16" y2="10"/>
+      </svg>
+      <span>Добавить товар</span>
+    </a>
+  </div>
+
+  <div class="header-rule anim-1" style="margin-bottom:0;">
+    <div class="header-rule-icon"></div>
+  </div>
+
+  {% if products %}
+    <div class="product-grid">
+      {% for el in products %}
+      <div class="product-card anim-2">
+        <h3>{{ el.name }}</h3>
+        <div class="card-actions">
+          <a href="{% url 'product-detail' el.id %}" class="btn btn-warning">
+            <span>Читать детальнее</span>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state anim-2">
+      <p>Нет записей</p>
+      <a href="{% url 'product-create' %}" class="btn btn-primary">
+        <span>Добавить первый товар</span>
+      </a>
+    </div>
+  {% endif %}
+
 </div>
-
-{%endblock%}
+{% endblock %}
