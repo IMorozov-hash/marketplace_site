@@ -1,10 +1,10 @@
 {% extends 'main/layout.html' %}
  
 {% block title %}Главная страница{% endblock %}
- 
+
 {% block content %}
 <div class="page-wrapper">
- 
+
   <div class="anim-1">
     <span class="form-eyebrow">Добро пожаловать</span>
     <h1>Главная <em>страница</em></h1>
@@ -12,8 +12,18 @@
       <div class="header-rule-icon"></div>
     </div>
   </div>
- 
-  <nav class="home-nav anim-2">
+
+  <!-- Dynamic content -->
+  <div class="visits-badge anim-2">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+    Вы посетили эту страницу
+    <strong>{{ num_visits }} {{ num_visits|pluralize:"раз,раза,раз" }}</strong>
+  </div>
+
+  <nav class="home-nav anim-3">
     <a href="{% url 'contact-page' %}" class="home-nav-item">
       <div class="home-nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -27,7 +37,7 @@
       </div>
       <div class="home-nav-arrow">→</div>
     </a>
- 
+
     <a href="{% url 'about-page' %}" class="home-nav-item">
       <div class="home-nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -41,7 +51,7 @@
       </div>
       <div class="home-nav-arrow">→</div>
     </a>
- 
+
     <a href="{% url 'product-home' %}" class="home-nav-item">
       <div class="home-nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -57,17 +67,34 @@
       <div class="home-nav-arrow">→</div>
     </a>
   </nav>
- 
+
 </div>
- 
+
 <style>
+  /* Visits */
+  .visits-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(200,169,110,0.08);
+    border: 1px solid rgba(200,169,110,0.25);
+    border-radius: 2px;
+    padding: 10px 18px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .visits-badge svg { width: 14px; height: 14px; color: var(--accent); flex-shrink: 0; }
+  .visits-badge strong { color: var(--accent); font-weight: 500; }
+
   .home-nav {
     display: flex;
     flex-direction: column;
     gap: 16px;
     max-width: 560px;
   }
- 
+
   .home-nav-item {
     display: flex;
     align-items: center;
@@ -82,7 +109,7 @@
     position: relative;
     overflow: hidden;
   }
- 
+
   .home-nav-item::before {
     content: '';
     position: absolute;
@@ -92,15 +119,15 @@
     transform: scaleY(0);
     transition: transform 0.25s ease;
   }
- 
+
   .home-nav-item:hover {
     box-shadow: 0 8px 32px rgba(0,0,0,0.08);
     transform: translateX(4px);
     border-color: rgba(200,169,110,0.4);
   }
- 
+
   .home-nav-item:hover::before { transform: scaleY(1); }
- 
+
   .home-nav-icon {
     width: 44px; height: 44px;
     background: rgba(200,169,110,0.1);
@@ -110,29 +137,29 @@
     color: var(--accent);
     transition: background 0.25s;
   }
- 
+
   .home-nav-icon svg { width: 20px; height: 20px; }
- 
+
   .home-nav-item:hover .home-nav-icon { background: rgba(200,169,110,0.18); }
- 
+
   .home-nav-text {
     flex: 1;
     display: flex; flex-direction: column; gap: 3px;
   }
- 
+
   .home-nav-label {
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px;
     font-weight: 400;
     color: var(--ink);
   }
- 
+
   .home-nav-sub {
     font-size: 12px;
     color: var(--muted);
     letter-spacing: 0.03em;
   }
- 
+
   .home-nav-arrow {
     font-size: 18px;
     color: var(--accent);
@@ -140,7 +167,7 @@
     transform: translateX(-6px);
     transition: opacity 0.25s, transform 0.25s;
   }
- 
+
   .home-nav-item:hover .home-nav-arrow {
     opacity: 1;
     transform: translateX(0);
