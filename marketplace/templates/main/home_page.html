@@ -1,10 +1,11 @@
 {% extends 'main/layout.html' %}
- 
+
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
 <div class="page-wrapper">
 
+  <!-- Header -->
   <div class="anim-1">
     <span class="form-eyebrow">Добро пожаловать</span>
     <h1>Главная <em>страница</em></h1>
@@ -13,8 +14,51 @@
     </div>
   </div>
 
-  <!-- Dynamic content -->
-  <div class="visits-badge anim-2">
+  <!-- Auth block -->
+  <div class="auth-block anim-2">
+    {% if user.is_authenticated %}
+      <div class="auth-user">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        <span>{{ user.get_username }}</span>
+      </div>
+      <div class="auth-divider"></div>
+      <form method="post" action="{% url 'logout' %}" style="margin:0;">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <button type="submit" class="auth-link auth-link--logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Выйти
+        </button>
+      </form>
+    {% else %}
+      <div class="auth-guest">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        Гость
+      </div>
+      <div class="auth-divider"></div>
+      <a href="{% url 'login' %}?next={{ request.path }}" class="auth-link auth-link--login">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+        Войти
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Visits badge -->
+  <div class="visits-badge anim-3">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
       <circle cx="12" cy="12" r="3"/>
@@ -23,7 +67,8 @@
     <strong>{{ num_visits }} {{ num_visits|pluralize:"раз,раза,раз" }}</strong>
   </div>
 
-  <nav class="home-nav anim-3">
+  <!-- Navigation -->
+  <nav class="home-nav anim-4">
     <a href="{% url 'contact-page' %}" class="home-nav-item">
       <div class="home-nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -71,7 +116,93 @@
 </div>
 
 <style>
-  /* Visits */
+  /* ── Auth block ── */
+  .auth-block {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(200,169,110,0.06);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 10px 18px;
+    margin-bottom: 24px;
+    font-size: 13px;
+  }
+
+  .auth-divider {
+    width: 1px;
+    height: 16px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .auth-user,
+  .auth-guest {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--muted);
+  }
+
+  .auth-user {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .auth-user svg,
+  .auth-guest svg {
+    width: 15px;
+    height: 15px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .auth-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-family: inherit;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .auth-link svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
+
+  .auth-link--login {
+    color: var(--accent);
+    border-color: rgba(200,169,110,0.4);
+    background: rgba(200,169,110,0.08);
+  }
+
+  .auth-link--login:hover {
+    background: rgba(200,169,110,0.18);
+    border-color: var(--accent);
+  }
+
+  .auth-link--logout {
+    color: var(--muted);
+    border-color: var(--border);
+  }
+
+  .auth-link--logout:hover {
+    color: #c0392b;
+    border-color: rgba(192,57,43,0.4);
+    background: rgba(192,57,43,0.06);
+  }
+
+  /* ── Visits badge ── */
   .visits-badge {
     display: inline-flex;
     align-items: center;
@@ -88,6 +219,7 @@
   .visits-badge svg { width: 14px; height: 14px; color: var(--accent); flex-shrink: 0; }
   .visits-badge strong { color: var(--accent); font-weight: 500; }
 
+  /* ── Navigation ── */
   .home-nav {
     display: flex;
     flex-direction: column;

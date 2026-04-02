@@ -13,7 +13,7 @@
     </div>
 
     <div class="form-card anim-2">
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="field-group">
@@ -29,6 +29,11 @@
         <div class="field-group">
           <label class="field-label">Цена</label>
           {{ form.price }}
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Изображение</label>
+          {{ form.image }}
         </div>
 
         {% if error %}

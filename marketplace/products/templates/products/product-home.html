@@ -1,7 +1,5 @@
 {% extends 'main/layout.html'%}
 
-
-
 {% block title %}Товары{% endblock %}
 
 {% block content %}
@@ -29,6 +27,13 @@
     <div class="product-grid">
       {% for el in products %}
       <div class="product-card anim-2">
+        {% if el.image %}
+          <img src="{{ el.image.url }}" alt="{{ el.name }}" style="width:100%; height:200px; object-fit:cover; border-radius:8px; margin-bottom:12px;">
+        {% else %}
+          <div style="width:100%; height:200px; background:var(--color-background-secondary); border-radius:8px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; color:var(--color-text-tertiary);">
+            Нет фото
+          </div>
+        {% endif %}
         <h3>{{ el.name }}</h3>
         <div class="card-actions">
           <a href="{% url 'product-detail' el.id %}" class="btn btn-warning">

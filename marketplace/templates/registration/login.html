@@ -1,0 +1,80 @@
+{% extends 'main/layout.html' %}
+{% block title %}Вход — Каталог товаров{% endblock %}
+
+{% block content %}
+<div class="features">
+  <div class="form-wrapper">
+
+    <div class="form-header anim-1">
+      <span class="form-eyebrow">Добро пожаловать</span>
+      <h1>Вход в <em>аккаунт</em></h1>
+      <div class="header-rule">
+        <div class="header-rule-icon"></div>
+      </div>
+    </div>
+
+    <div class="form-card anim-2">
+
+      {% if form.errors %}
+      <div class="alert alert-error">
+        Неверный логин или пароль. Попробуйте ещё раз.
+      </div>
+      {% endif %}
+
+      {% if next %}
+        {% if user.is_authenticated %}
+        <div class="alert alert-warning">
+          У вашего аккаунта нет доступа к этой странице.
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+          Войдите, чтобы продолжить.
+        </div>
+        {% endif %}
+      {% endif %}
+
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+
+        <div class="field-group">
+          <label class="field-label" for="id_username">Имя пользователя</label>
+          {{ form.username }}
+        </div>
+
+        <div class="field-group" style="margin-bottom: 36px;">
+          <label class="field-label" for="id_password">Пароль</label>
+          {{ form.password }}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>Войти</span>
+        </button>
+      </form>
+
+      <div style="display:flex;align-items:center;gap:12px;margin:20px 0;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        <span style="font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;">или</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-block"
+          style="background:transparent;color:var(--danger);border:2px solid rgba(184,50,50,.35);">
+          <span>Выйти из аккаунта</span>
+        </button>
+      </form>
+
+    </div>
+
+    <div class="form-footer anim-3">
+      <a href="{% url 'password_reset' %}"
+         style="color:var(--accent);border-bottom:1px solid rgba(200,169,110,.3);">
+        Забыли пароль?
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
